@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A4 Print - 256 Division Circle</title>
+    <style>
+        /* A4 Page Setup */
+        @page {
+            size: A4 portrait;
+            margin: 10mm;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+            font-family: sans-serif;
+        }
+
+        /* High-res canvas scaled for A4 viewing */
+        canvas {
+            background-color: #ffffff;
+            width: 190mm; /* A4 width minus margins */
+            height: 190mm;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .print-btn {
+            margin-bottom: 20px;
+            padding: 10px 25px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        /* Hide button and background styling during actual printing */
+        @media print {
+            body {
+                background-color: transparent;
+                align-items: flex-start;
+                justify-content: flex-start;
+            }
+            .print-btn {
+                display: none;
+            }
+            canvas {
+                box-shadow: none;
+                margin: 0 auto;
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <button class="print-btn" onclick="window.print()">Print A4 Page</button>
+
+    <!-- Canvas internal resolution set to 2000x2000 for crisp ink printing -->
+    <canvas id="circleCanvas" width="2000" height="2000"></canvas>
+
+    <script>
+        const canvas = document.getElementById('circleCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+        const radius = 950; // Maximize size within the high-res canvas
+        const divisions = 365;
+
+        // Draw outer circle
+        ctx.beginPath();
+        ctx.strokeStyle = '#000000';
+        ctx.lineWidth = 4; // Thicker line for high-res print
+        ctx.stroke();
+
+        // Draw 256 lines
+        ctx.strokeStyle = 'rgba(0, 0, 0, 0.4)';
+        ctx.lineWidth = 2;
+
+        for (let i = 0; i < divisions; i++) {
+            const angle = (i / divisions) * (2 * Math.PI);
+            const endX = centerX + radius * Math.cos(angle);
+            const endY = centerY + radius * Math.sin(angle);
+
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY);
+            ctx.lineTo(endX, endY);
+            ctx.stroke();
+        }
+    </script>
+
+</body>
+</html>
